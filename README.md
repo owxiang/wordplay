@@ -1,21 +1,22 @@
-## WordPlay
+# WordPlay
 
-### Overview
+## Overview
 
 [WordPlay](https://main.d36gsd7ijqrswq.amplifyapp.com/) is a web-based application developed to provide an easily accessible platform for acronyms and abbreviations.
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-### Technologies used
+## Technologies used
 
 - AWS Lambda
+  - See codes [here](https://github.com/owxiang/wordplay/tree/main/aws).
 - AWS DynamoDB
 - AWS SES
 - AWS API Gateway
 - AWS Systems Manager
 - AWS Amplify
 
-### Cloud Architecture
+## Cloud Architecture
 
 ![wordplay drawio](https://github.com/owxiang/wordplay/assets/22820037/12b554f8-9ddc-4f64-9328-a2d40ea1b17f)
 
