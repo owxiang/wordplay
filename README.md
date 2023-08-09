@@ -19,7 +19,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ### Cloud Architecture
 
-![wordplay drawio](https://github.com/owxiang/wordplay/assets/22820037/dddad36a-1511-49c9-ae4f-8ed9bf468dc4)
+![wordplay drawio](https://github.com/owxiang/wordplay/assets/22820037/12b554f8-9ddc-4f64-9328-a2d40ea1b17f)
 
 ## Getting Started
 
