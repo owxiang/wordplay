@@ -1,0 +1,319 @@
+body {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.search-input {
+    padding: 10px;
+    width: 100%;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+
+.info-item {
+    border: 1px solid #eee;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.action-button {
+    padding: 5px 15px;
+    margin-right: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.action-button:hover {
+    opacity: 0.9;
+}
+
+.update-button {
+    background-color: #0070f3;
+    color: white;
+}
+
+.delete-button {
+    background-color: #f44336;
+    color: white;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.manage-button a {
+    margin: 10px 0;
+    display: block;
+    background-color: #0070f3;
+    border: none;
+    padding: 10px 15px;
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+}
+
+.manage-button a:hover {
+    background-color: #0050c3;
+}
+
+.add-button a {
+    margin: 10px 0;
+    display: block;
+    background-color: #0070f3;
+    border: none;
+    padding: 10px 15px;
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    border-radius: 5px;
+    transition: background-color 0.2s;
+}
+
+.add-button a:hover {
+    background-color: #0050c3;
+}
+
+.modal-remove-button, 
+.modal-add-button, 
+.modal-submit-button, 
+.modal-cancel-button {
+    border: none;
+    padding: 8px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.modal-remove-button {
+    background-color: #f44336;
+    color: white;
+}
+
+.modal-remove-button:hover {
+    background-color: #da190b;
+}
+
+.modal-add-button {
+    background-color: #0070f3;
+    color: white;
+}
+
+.modal-add-button:hover {
+    background-color: #0050c3;
+}
+
+.modal-submit-button {
+    background-color: #0070f3;
+    color: white;
+}
+
+.modal-submit-button:hover {
+    background-color: #0050c3;
+}
+
+.modal-cancel-button {
+    background-color: #555555;
+    color: white;
+}
+
+.modal-cancel-button:hover {
+    background-color: #3f3f3f;
+}
+
+.modal-submit-button:disabled {
+    background-color: #b8b8b8; 
+    cursor: not-allowed; 
+}
+
+.modal-fields-container input {
+    height: 40px;  
+    padding: 0 10px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    margin-right: 5px; 
+}
+
+.modal-fields-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    justify-content: center;
+
+    z-index: 1000;
+}
+
+/* toast */
+
+.toast {
+    position: fixed;
+    bottom: 20px; 
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    z-index: 2000;
+}
+
+.toast.success {
+    background-color: rgba(0, 128, 0, 0.9);
+}
+
+.toast.error {
+    background-color: rgba(255, 0, 0, 0.9); 
+}
+
+.toast.info {
+    background-color: rgba(0, 128, 0, 0.9); 
+}
+
+/* admin approval  */
+
+.pending {
+    font-weight: bold;
+    color: #0070f3; 
+    font-size: 20px;
+    border-bottom: 2px solid #e2e2e2;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+.button-group {
+    margin-top: 10px;
+}
+
+.approve-button, .reject-button {
+    padding: 5px 15px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.approve-button {
+    background-color: #4CAF50; 
+    color: white;
+}
+
+.approve-button:hover {
+    background-color: #45a049;
+}
+
+.reject-button {
+    background-color: #f44336;
+    color: white;
+}
+
+.reject-button:hover {
+    background-color: #da190b;
+}
+
+/* switch */
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+    vertical-align: middle;
+    margin-bottom: 10px;  /* Adjust the value as per your need */
+
+  }
+  
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 17px; 
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%; 
+  }
+  
+  input:checked + .slider {
+    background-color: #2196F3;
+  }
+  
+  input:checked + .slider:before {
+    transform: translateX(26px);
+  }
+  
+  /* notification bubble */
+
+  .notification-bubble {
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 0.7rem;
+    margin-left: 10px;
+    vertical-align: middle;
+    display: inline-block;
+  }
+  
