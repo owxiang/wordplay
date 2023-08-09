@@ -70,7 +70,7 @@ useEffect(() => {
 
 
   const handleDelete = async (itemId: string) => {
-    const userConfirmation = window.confirm("Are you sure you want to request delete this item?");
+    const userConfirmation = window.confirm("Are you sure you wish to submit a deletion request for this item?");
 
     if (userConfirmation) {
         try {
@@ -83,7 +83,7 @@ useEffect(() => {
 
             const result = await response.json();
             if (response.status === 200) {
-                setToast({ message: "Item delete request submitted.", type: "success" });
+                setToast({ message: "Deletion request has been successfully submitted.", type: "success" });
                 setItems(prevItems => prevItems.filter(item => item.id !== itemId));
             } else {
                 setToast({ message: "There was an error processing your request. Please try again.", type: "error" });
@@ -134,8 +134,7 @@ const handleUpdateSubmit = async (itemId: string, updatedItem: AcronymData) => {
 
         if (response.status === 200) {
             setItems(prevItems => prevItems.filter(item => item.id !== itemId));
-            setToast({ message: "Item update request submitted.", type: "success" });
-
+            setToast({ message: "Update request has been successfully submitted.", type: "success" });
         } else {
             setToast({ message: "Error updating the item.", type: "error" });
         }
@@ -185,7 +184,7 @@ const handleAddField = () => {
             return;
         }
     }
-    setToast({ message: "Item add request submitted.", type: "success" });
+    setToast({ message: "New item request has been successfully submitted.", type: "success" });
     setIsAddModalOpen(false);
 };
 

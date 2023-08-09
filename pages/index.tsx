@@ -103,7 +103,7 @@ export default function Page() {
         const data = await response.json();
         if (response.status === 200) {
           setOtpSent(true);
-          setToast({ message: "OTP is sent to your email.", type: "success" });
+          setToast({ message: "An OTP has been sent to your email address.", type: "success" });
         } else {
           setToast({ message: "Error sending OTP. Please try again.", type: "error" });
         }

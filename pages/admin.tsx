@@ -93,7 +93,10 @@ export default function Page() {
         });
 
         const data = await response.json();
-        setToast({ message: action + " success.", type: "success" });
+          setToast({ 
+            message: `${action.charAt(0).toUpperCase() + action.slice(1)} success.`, 
+            type: "success" 
+        });
         setItems(prevItems => prevItems.filter(item => item.id !== itemId));
 
     } catch (error) {
@@ -203,8 +206,8 @@ if (showPendingOnly) {
             <div key={item.id} className="info-item">
             <div className="pending">Update</div>
        
-              {oldAcronym} -{'>'} {newAcronym} <br />
-              {oldAbbreviation} -{'>'} {newAbbreviation} <br />
+              {oldAcronym} ⇒ {newAcronym} <br />
+              {oldAbbreviation} ⇒ {newAbbreviation} <br />
               Requestor: {email}
               <div className="button-group">
               <button onClick={() => handleApprovalAction(item.id, 'approve', item.status)} className="approve-button">Approve</button>
