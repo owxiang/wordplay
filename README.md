@@ -52,3 +52,8 @@ Value: `API-GATEWAY-INVOKE-URL`
 ```
 npm run dev
 ```
+
+## Future Work
+- SES Production Access
+  - Currnetly I am only able to send and receive OTP with my personal email.
+- Duplication checker
