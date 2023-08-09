@@ -11,10 +11,12 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 - AWS Lambda
   - See codes [here](https://github.com/owxiang/wordplay/tree/main/aws).
 - AWS DynamoDB
-- AWS SES
+- AWS Simple Email Service
 - AWS API Gateway
 - AWS Systems Manager
 - AWS Amplify
+- Next.js
+- Python
 
 ## Cloud Architecture
 
