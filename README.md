@@ -1,15 +1,26 @@
+## WordPlay Project
+
+### Overview
+
+WordPlay is a web-based application designed for Abbreviation and Acyonm pairing.
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
+### Technologies Used
+
+1. AWS Lambda: Serverless functions are utilized to handle backend operations such as generating OTPs and communicating with other AWS services like DynamoDB and SES.
+2. Amazon DynamoDB: A NoSQL database service where OTPs and associated data are stored.
+3. Amazon SES (Simple Email Service): Used to send OTPs to user email addresses.
+4. Amazon API Gateway: Manages and handles HTTP requests to AWS Lambda functions, providing a scalable solution to manage API calls.
+5. React: Frontend development framework used for building the UI of the application.
+6. CORS Configuration: To handle and allow cross-origin requests from the frontend to the backend.
 
 ## Getting Started
 
 First, run the development server:
 
-```bash
+```
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
