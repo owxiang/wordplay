@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useEmail } from '../contexts/EmailContext';
+import React, { useMemo } from 'react';
 import Head from 'next/head';
 
 type AcronymData = {
