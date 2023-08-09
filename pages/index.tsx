@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useEmail } from '../contexts/EmailContext';
+import Head from 'next/head';
 
 type AcronymData = {
   datetime: string;
@@ -161,6 +162,9 @@ return (
           {toast.message}
       </div>
     )}
+   <Head>
+        <title>WordPlay: Home</title>
+      </Head>
 
     <input
       type="text"

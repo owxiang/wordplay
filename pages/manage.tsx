@@ -1,6 +1,7 @@
 import React, { useState, useEffect} from 'react';
 import { useEmail } from '../contexts/EmailContext';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 
 type AcronymData = {
   datetime: string;
@@ -198,6 +199,10 @@ const handleAddField = () => {
           {toast.message}
       </div>
     )}
+      <Head>
+        <title>WordPlay: User</title>
+      </Head>
+
       <input 
         type="text" 
         className="search-input"

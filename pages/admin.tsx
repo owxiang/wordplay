@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useEmail } from '../contexts/EmailContext';
-import React, { useMemo } from 'react';
+import Head from 'next/head';
 
 type AcronymData = {
   datetime: string;
@@ -124,7 +124,9 @@ export default function Page() {
           {toast.message}
         </div>
       )}
-
+  <Head>
+        <title>WordPlay: Admin</title>
+      </Head>
   <label className="switch">
   <input type="checkbox" checked={showPendingOnly} onChange={togglePendingItems} />
   <span className="slider round"></span>

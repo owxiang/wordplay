@@ -2,11 +2,9 @@
 
 ### Overview
 
-[WordPlay](https://main.d36gsd7ijqrswq.amplifyapp.com/) is a web-based application designed to provide an easily accessible platform for acronyms and abbreviations.
+[WordPlay](https://main.d36gsd7ijqrswq.amplifyapp.com/) is a web-based application developed to provide an easily accessible platform for acronyms and abbreviations.
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
-
 
 ### Technologies used
 
@@ -24,9 +22,11 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 ## Getting Started
 
 Clone the repo
+
 ```
 https://github.com/owxiang/wordplay.git
 ```
+
 ## Configurations
 
 **Local Environment variables**
@@ -54,6 +54,8 @@ npm run dev
 ```
 
 ## Future Work
+
 - SES Production Access
   - Currnetly I am only able to send and receive OTP with my personal email.
 - Duplication checker
+- Export
