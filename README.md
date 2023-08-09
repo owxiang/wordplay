@@ -6,7 +6,7 @@
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Technologies used
+## Technologies
 
 - AWS Lambda
   - See codes [here](https://github.com/owxiang/wordplay/tree/main/aws).
