@@ -1,8 +1,11 @@
 body {
     padding: 20px;
     font-family: Arial, sans-serif;
+    -webkit-text-size-adjust: 100%; 
 }
-
+input, select, textarea {
+    font-size: 16px;
+}
 .search-input {
     padding: 10px;
     width: 100%;
@@ -43,6 +46,14 @@ body {
     color: white;
 }
 
+.cancel-button {
+    background-color: #555555;
+    color: white;
+}
+
+.cancel-button:hover {
+    background-color: #3f3f3f;
+}
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -64,8 +75,9 @@ body {
 }
 
 .modal-buttons {
-    display: flex;
+    display: block;
     justify-content: space-between;
+    
 }
 
 .manage-button a {
@@ -104,12 +116,17 @@ body {
     background-color: #0050c3;
 }
 
+.approve-button,
+.reject-button,
+.cancel-button,
+.update-button,
+.delete-button,
 .modal-remove-button, 
 .modal-add-button, 
 .modal-submit-button, 
 .modal-cancel-button {
     border: none;
-    padding: 8px 15px;
+    padding: 6px 12px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -180,9 +197,7 @@ body {
     right: 0;
     bottom: 0;
     background-color: rgb(255, 255, 255);
-    display: flex;
     justify-content: center;
-
     z-index: 1000;
 }
 
@@ -225,15 +240,6 @@ body {
 
 .button-group {
     margin-top: 10px;
-}
-
-.approve-button, .reject-button {
-    padding: 5px 15px;
-    margin-right: 10px;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-    transition: background-color 0.2s;
 }
 
 .approve-button {

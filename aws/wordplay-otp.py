@@ -76,17 +76,17 @@ def send_otp(to_email):
     from_email = 'xiangweiong@gmail.com'
     subject = 'Your WordPlay OTP'
     body = """
-    Hello,
-    
-    Thank you for using WordPlay!
-    
-    Your One-Time Password (OTP) is:
-    {otp}
-    
-    Please enter this OTP to proceed. Remember, it will expire in 3 minutes.
-    
-    Kind Regards,
-    WordPlay Team
+Hello,
+
+Thank you for using WordPlay!
+
+Your One-Time Password (OTP) is:
+{otp}
+
+Please enter this OTP to proceed. Remember, it will expire in 3 minutes.
+
+Kind Regards,
+WordPlay Team
     """.format(otp=otp)
 
     response = ses.send_email(

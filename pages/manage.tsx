@@ -235,7 +235,7 @@ const handleAddField = () => {
                         Update
                     </button>
                     <button onClick={() => setisUpdateModalOpen(false)}
-                    className="action-button delete-button">
+                    className="action-button cancel-button">
                         Cancel
                     </button>
                 </div>
