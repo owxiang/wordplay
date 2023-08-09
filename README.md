@@ -20,14 +20,14 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Cloud Architecture
 
-![wordplay drawio](https://github.com/owxiang/wordplay/assets/22820037/12b554f8-9ddc-4f64-9328-a2d40ea1b17f)
+![wordplay drawio](https://github.com/owxiang/wordplay/assets/22820037/adf0bf45-9b8d-45db-a80e-c2afc148ec90)
 
 ## Getting Started
 
 Clone the repo
 
 ```
-https://github.com/owxiang/wordplay.git
+git clone https://github.com/owxiang/wordplay.git
 ```
 
 ## Configurations
