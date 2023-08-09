@@ -59,6 +59,6 @@ npm run dev
 ## Future Work
 
 - SES Production Access
-  - Currnetly I am only able to send and receive OTP with my personal email.
-- Duplication checker
-- Export
+  - Currently I'm only able to send and receive OTP using my personal email.
+- Duplicate checker
+- Batch import

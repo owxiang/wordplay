@@ -120,6 +120,54 @@ export default function Page() {
     return [];
   }, [items, showResults, showPendingOnly]);
 
+  const formatStatus = (status: string) => {
+    if (status.startsWith("pending_add")) {
+        return "add";
+    }
+    if (status.startsWith("pending_delete-by-")) {
+        return "delete by " + status.split("-by-")[1];
+    }
+    if (status.startsWith("pending_update")) {
+      const parts = status.split("-by-");
+      const user = parts[1];
+  
+      const actions = parts[0].split("-and-");
+      const acronymParts = actions[0].split("-to-");
+      const oldAcronym = acronymParts[0].split("-").pop();
+      const newAcronym = acronymParts[1];
+  
+      const fullFormParts = actions[1].split("-to-");
+      const oldFullForm = fullFormParts[0];
+      const newFullForm = fullFormParts[1];
+  
+      return `update ${oldAcronym} to ${newAcronym} and ${oldFullForm} to ${newFullForm} by ${user}`;
+  }
+  
+    return status;
+};
+
+const downloadPendingDataAsCSV = async () => {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/wordplay-scan-pending`);
+  const data = await response.json();
+
+  // Format the data into csv rows
+  const csvContent = data.map((item: any) => {
+      const formattedStatus = formatStatus(item.status);
+      return [item.acronym, item.abbreviation, item.by, formattedStatus].map(value => `"${value}"`).join(',');
+  }).join('\n');
+
+  const header = "acronym,abbreviation,created by,request\n"; // CSV header
+  const csvData = new Blob([header + csvContent], { type: 'text/csv' });
+  const csvUrl = URL.createObjectURL(csvData);
+
+  const downloadLink = document.createElement('a');
+  downloadLink.href = csvUrl;
+  downloadLink.download = 'wordplay-pending-request.csv';
+  document.body.appendChild(downloadLink);
+  downloadLink.click();
+  document.body.removeChild(downloadLink);
+}
+
   return (
     <div>
 
@@ -131,6 +179,7 @@ export default function Page() {
   <Head>
         <title>WordPlay: Admin</title>
       </Head>
+
   <label className="switch">
   <input type="checkbox" checked={showPendingOnly} onChange={togglePendingItems} />
   <span className="slider round"></span>
@@ -230,6 +279,12 @@ if (showPendingOnly) {
         }
         return null;
       })}
+
+<div className="manage-button">
+<a onClick={() => downloadPendingDataAsCSV()}>
+Export Pending Request
+    </a>
+</div>
 
     </div>
   );
