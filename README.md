@@ -64,4 +64,5 @@ npm run dev
   - Currently I'm only able to send and receive OTP using my personal email.
 - Duplicate checker
 - Batch import
+- Contributor leaderboard
 - IaC

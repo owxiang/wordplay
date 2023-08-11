@@ -235,7 +235,7 @@ export default function Page() {
       {isUserLoginModalOpen && (
         <div className="modal-fields-container">
           <div className="modal-content">
-            <h2>Login</h2>
+            <h2>User Portal Authentication</h2>
             <input
               type="email"
               placeholder="Email"
