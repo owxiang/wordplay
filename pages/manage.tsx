@@ -16,6 +16,7 @@ export default function ManagePage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredItems, setFilteredItems] = useState<AcronymData[]>([]);
   const [items, setItems] = useState<AcronymData[]>([]);
+  const [itemsAll, setItemsAll] = useState<AcronymData[]>([]);
   const [isUpdateModalOpen, setisUpdateModalOpen] = useState(false);
   const [currentItem, setCurrentItem] = useState<AcronymData | null>(null);
   const [originalItem, setOriginalItem] = useState<AcronymData | null>(null);
@@ -33,6 +34,7 @@ export default function ManagePage() {
   const { userEmail } = useEmail();
   const router = useRouter();
   const [toast, setToast] = useState({ message: "", type: "" });
+  const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
   useEffect(() => {
     if (!userEmail) {
@@ -44,17 +46,42 @@ export default function ManagePage() {
     if (toast.message) {
       const timer = setTimeout(() => {
         setToast({ message: "", type: "" });
-      }, 3000); // 3 seconds
+      }, 3000);
 
       return () => clearTimeout(timer);
     }
   }, [toast]);
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/wordplay-scan-approved`)
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/wordplay-scan-approved`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
       .then((response) => response.json())
       .then((result) => setItems(result));
   }, []);
+
+  useEffect(() => {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/wordplay-scan`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((result) => setItemsAll(result));
+
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/wordplay-scan-approved`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((result) => setItems(result));
+  }, [isAddModalOpen, isUpdateModalOpen]);
 
   useEffect(() => {
     if (searchTerm.trim()) {
@@ -124,6 +151,31 @@ export default function ManagePage() {
       originalItem!.acronym !== currentItem?.acronym ||
       originalItem!.abbreviation !== currentItem?.abbreviation
     ) {
+      const duplicate = itemsAll.find(
+        (item) =>
+          item.acronym === currentItem!.acronym &&
+          item.abbreviation === currentItem!.abbreviation
+      );
+
+      if (duplicate) {
+        if (duplicate.status === "approved") {
+          setToast({
+            message: `${currentItem!.acronym} and ${
+              currentItem!.abbreviation
+            } already exists.`,
+            type: "error",
+          });
+          return;
+        } else if (duplicate.status.includes("pending")) {
+          setToast({
+            message: `${currentItem!.acronym} and ${
+              currentItem!.abbreviation
+            } already exists as pending.`,
+            type: "error",
+          });
+          return;
+        }
+      }
       const status = `pending_update-${originalItem!.acronym}-to-${
         currentItem?.acronym
       }-and-${originalItem!.abbreviation}-to-${
@@ -200,8 +252,56 @@ export default function ManagePage() {
 
   const handleSubmit = async () => {
     const BASE_API_ENDPOINT = `${process.env.NEXT_PUBLIC_API_URL}/wordplay-add`;
+    let localErrorMessages = [];
 
-    for (const entry of entries) {
+    for (let i = 0; i < entries.length; i++) {
+      const entry = entries[i];
+
+      const duplicate = itemsAll.find(
+        (item) =>
+          item.acronym === entry.acronym &&
+          item.abbreviation === entry.abbreviation
+      );
+
+      if (duplicate) {
+        if (duplicate.status === "approved") {
+          localErrorMessages.push(
+            `${entry.acronym} and ${entry.abbreviation} already exists.`
+          );
+          continue;
+        } else if (duplicate.status.includes("pending")) {
+          localErrorMessages.push(
+            `${entry.acronym} and ${entry.abbreviation} already exists as pending.`
+          );
+          continue;
+        }
+      }
+
+      const duplicateInEntries = entries.find(
+        (e, idx) =>
+          e.acronym === entry.acronym &&
+          e.abbreviation === entry.abbreviation &&
+          idx !== i
+      );
+
+      if (duplicateInEntries) {
+        const errorMessage = `${entry.acronym} and ${entry.abbreviation} have been entered more than once.`;
+        if (!localErrorMessages.some((msg) => msg === errorMessage)) {
+          localErrorMessages.push(errorMessage);
+        }
+      }
+    }
+
+    if (localErrorMessages.length > 0) {
+      setToast({
+        message: localErrorMessages.join("\n"),
+        type: "error",
+      });
+      return;
+    }
+
+    for (let i = 0; i < entries.length; i++) {
+      const entry = entries[i];
       const endpointWithParams = `${BASE_API_ENDPOINT}?acronym=${entry.acronym}&abbreviation=${entry.abbreviation}&email=${userEmail}`;
 
       try {
@@ -213,25 +313,24 @@ export default function ManagePage() {
         });
 
         if (response.status !== 200) {
-          const data = await response.json();
           setToast({
-            message: "Error adding item. Please try again.",
+            message:
+              "There was an error processing your request. Please try again.",
             type: "error",
           });
-
           return;
         }
       } catch (error) {
         setToast({
-          message: "There was an error. Please try again.",
+          message:
+            "There was an error processing your request. Please try again.",
           type: "error",
         });
-
         return;
       }
     }
     setToast({
-      message: "New item request has been successfully submitted.",
+      message: "All items have been successfully submitted.",
       type: "success",
     });
     setIsAddModalOpen(false);
@@ -240,8 +339,13 @@ export default function ManagePage() {
   return (
     <div>
       {toast.message && (
-        <div className={`toast ${toast.type}`}>{toast.message}</div>
+        <div className={`toast ${toast.type}`}>
+          {toast.message.split("\n").map((line, idx) => (
+            <div key={idx}>{line}</div>
+          ))}
+        </div>
       )}
+
       <Head>
         <title>WordPlay: User</title>
       </Head>
@@ -326,6 +430,7 @@ export default function ManagePage() {
           onClick={() => {
             setIsAddModalOpen(true);
             setEntries([...initialEntries]);
+            setErrorMessages([]);
           }}
         >
           Add

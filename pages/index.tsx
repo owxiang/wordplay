@@ -32,7 +32,7 @@ export default function Page() {
     if (toast.message) {
       const timer = setTimeout(() => {
         setToast({ message: "", type: "" });
-      }, 3000); // 3 seconds
+      }, 3000);
 
       return () => clearTimeout(timer);
     }

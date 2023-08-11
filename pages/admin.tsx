@@ -22,6 +22,7 @@ export default function Page() {
   const [toast, setToast] = useState({ message: "", type: "" });
   const [showPendingOnly, setShowPendingOnly] = useState<boolean>(true);
   const { userEmail } = useEmail();
+  const [approvalCount, setApprovalCount] = useState(0);
 
   useEffect(() => {
     if (!userEmail) {
@@ -33,7 +34,7 @@ export default function Page() {
     if (toast.message) {
       const timer = setTimeout(() => {
         setToast({ message: "", type: "" });
-      }, 3000); // 3 seconds
+      }, 3000);
 
       return () => clearTimeout(timer);
     }
@@ -51,7 +52,7 @@ export default function Page() {
         setData(result);
         setItems(result);
       });
-  }, []);
+  }, [approvalCount]);
 
   useEffect(() => {
     const newFilteredData = data.filter(
@@ -100,10 +101,12 @@ export default function Page() {
     } catch (error) {
       setToast({ message: "Error during the API call.", type: "error" });
     }
+    setApprovalCount((prevCount) => prevCount + 1);
   };
 
   const togglePendingItems = () => {
     setShowPendingOnly((prevState) => !prevState);
+    setApprovalCount((prevCount) => prevCount + 1);
   };
 
   const sortedItems = React.useMemo(() => {
@@ -149,7 +152,6 @@ export default function Page() {
     );
     const data = await response.json();
 
-    // Format the data into csv rows
     const csvContent = data
       .map((item: any) => {
         const formattedStatus = formatStatus(item.status);
@@ -159,7 +161,7 @@ export default function Page() {
       })
       .join("\n");
 
-    const header = "acronym,abbreviation,created by,request\n"; // CSV header
+    const header = "acronym,abbreviation,created by,request\n";
     const csvData = new Blob([header + csvContent], { type: "text/csv" });
     const csvUrl = URL.createObjectURL(csvData);
 
