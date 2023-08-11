@@ -103,9 +103,12 @@ export default function ManagePage() {
     );
 
     if (userConfirmation) {
+      const status = `pending_delete\nby: ${userEmail}`;
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/wordplay-delete?id=${itemId}&status=pending_delete-by-${userEmail}`,
+          `${
+            process.env.NEXT_PUBLIC_API_URL
+          }/wordplay-delete?id=${itemId}&status=${encodeURIComponent(status)}`,
           {
             method: "DELETE",
             headers: {
@@ -176,11 +179,19 @@ export default function ManagePage() {
           return;
         }
       }
-      const status = `pending_update-${originalItem!.acronym}-to-${
-        currentItem?.acronym
-      }-and-${originalItem!.abbreviation}-to-${
-        currentItem?.abbreviation
-      }-by-${userEmail}`;
+      // const status = `pending_update-${originalItem!.acronym}-to-${
+      //   currentItem?.acronym
+      // }-and-${originalItem!.abbreviation}-to-${
+      //   currentItem?.abbreviation
+      // }-by-${userEmail}`;
+
+      const status = `pending_update
+CurrentAcronym: ${originalItem?.acronym}
+CurrentAbbreviation: ${originalItem?.abbreviation}
+NewAcronym: ${currentItem?.acronym}
+NewAbbreviation: ${currentItem?.abbreviation}
+By: ${userEmail}`;
+
       const updatedItem = {
         ...currentItem!,
         status: status,

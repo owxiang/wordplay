@@ -121,29 +121,29 @@ export default function Page() {
   }, [items, showResults, showPendingOnly]);
 
   const formatStatus = (status: string) => {
-    if (status.startsWith("pending_add")) {
-      return "add";
-    }
-    if (status.startsWith("pending_delete-by-")) {
-      return "delete by " + status.split("-by-")[1];
-    }
-    if (status.startsWith("pending_update")) {
-      const parts = status.split("-by-");
-      const user = parts[1];
+    const lines = status.split("\n").map((line) => line.trim());
 
-      const actions = parts[0].split("-and-");
-      const acronymParts = actions[0].split("-to-");
-      const oldAcronym = acronymParts[0].split("-").pop();
-      const newAcronym = acronymParts[1];
-
-      const fullFormParts = actions[1].split("-to-");
-      const oldFullForm = fullFormParts[0];
-      const newFullForm = fullFormParts[1];
-
-      return `update ${oldAcronym} to ${newAcronym} and ${oldFullForm} to ${newFullForm} by ${user}`;
+    if (lines[0] === "pending_add") {
+      return ["add", ""];
     }
 
-    return status;
+    if (lines[0] === "pending_delete") {
+      const email = lines[1].split(": ")[1];
+      return [`delete`, email];
+    }
+
+    if (lines[0] === "pending_update") {
+      const oldAcronym = lines[1].split(": ")[1];
+      const oldFullForm = lines[2].split(": ")[1];
+      const newAcronym = lines[3].split(": ")[1];
+      const newFullForm = lines[4].split(": ")[1];
+      const email = lines[5].split(": ")[1];
+
+      const formattedRequest = `update \n${oldAcronym} to ${newAcronym}\n${oldFullForm} to ${newFullForm}`;
+      return [formattedRequest, email];
+    }
+
+    return [status, ""];
   };
 
   const downloadPendingDataAsCSV = async () => {
@@ -154,14 +154,20 @@ export default function Page() {
 
     const csvContent = data
       .map((item: any) => {
-        const formattedStatus = formatStatus(item.status);
-        return [item.acronym, item.abbreviation, item.by, formattedStatus]
-          .map((value) => `"${value}"`)
-          .join(",");
+        const [formattedStatus, requestBy] = formatStatus(item.status);
+        if (formattedStatus === "add") {
+          return [item.acronym, item.abbreviation, formattedStatus, item.by]
+            .map((value) => `"${value}"`)
+            .join(",");
+        } else {
+          return [item.acronym, item.abbreviation, formattedStatus, requestBy]
+            .map((value) => `"${value}"`)
+            .join(",");
+        }
       })
       .join("\n");
 
-    const header = "acronym,abbreviation,created by,request\n";
+    const header = "acronym,abbreviation,request,requested_by\n";
     const csvData = new Blob([header + csvContent], { type: "text/csv" });
     const csvUrl = URL.createObjectURL(csvData);
 
@@ -202,8 +208,6 @@ export default function Page() {
         value={searchTerm}
         onChange={handleInputChange}
       />
-
-      {/* {showResults && items.map((item) => { */}
       {sortedItems.map((item) => {
         if (showPendingOnly) {
           if (!item.status.includes("pending")) {
@@ -242,7 +246,8 @@ export default function Page() {
             </div>
           );
         } else if (item.status.includes("pending_delete")) {
-          const [status, byEmail] = item.status.split("-by-");
+          const [statusAction, byPart] = item.status.split("\n");
+          const byEmail = byPart.split(": ")[1];
           return (
             <div key={item.id} className="info-item">
               <div className="pending">Delete</div>
@@ -270,16 +275,16 @@ export default function Page() {
           );
         } else if (item.status.includes("pending_update")) {
           const pattern =
-            /^pending_update-(.+)-to-(.+)-and-(.+)-to-(.+)-by-(.+)$/;
-
+            /pending_update\nCurrentAcronym: (?<CurrentAcronym>\S+)\nCurrentAbbreviation: (?<CurrentAbbreviation>.+)\nNewAcronym: (?<NewAcronym>\S+)\nNewAbbreviation: (?<NewAbbreviation>.+)\nBy: (?<ByEmail>.+)/s;
           const match = item.status.match(pattern);
 
-          if (match) {
-            const oldAcronym = match[1];
-            const newAcronym = match[2];
-            const oldAbbreviation = match[3].trim();
-            const newAbbreviation = match[4].trim();
-            const email = match[5];
+          if (match && match.groups) {
+            const oldAcronym = match.groups.CurrentAcronym;
+            const newAcronym = match.groups.NewAcronym;
+            const oldAbbreviation = match.groups.CurrentAbbreviation.trim();
+            const newAbbreviation = match.groups.NewAbbreviation.trim();
+            const email = match.groups.ByEmail;
+
             return (
               <div key={item.id} className="info-item">
                 <div className="pending">Update</div>
