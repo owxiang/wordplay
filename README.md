@@ -34,11 +34,11 @@ git clone https://github.com/owxiang/wordplay.git
 
 **Local Environment variables**
 
-Create a `.env.local` file at the root of project (if you don't already have one).
+Create a `.env.local` file at the root of project.
 
 Add API Gateway Invoke URL to this file:
 
-`NEXT_PUBLIC_API_URL = API-GATEWAY-INVOKE-URL `
+`NEXT_PUBLIC_API_URL = API-GATEWAY-INVOKE-URL`
 
 **Amplify Environment variables**
 
