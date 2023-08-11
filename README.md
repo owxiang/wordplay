@@ -58,6 +58,8 @@ npm run dev
 
 ## Future Work
 
+- Refactor -
+  - Break code into seperate state hooks, effect hooks, event handlers and render logic files.
 - SES Production Access
   - Currently I'm only able to send and receive OTP using my personal email.
 - Duplicate checker
