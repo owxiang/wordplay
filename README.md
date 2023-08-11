@@ -12,7 +12,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
   - See codes [here](https://github.com/owxiang/wordplay/tree/main/aws).
 - AWS DynamoDB
 - AWS Simple Email Service
-  - See limitation [here](https://github.com/owxiang/wordplay/edit/main/README.md#future-work). 
+  - See limitation [here](https://github.com/owxiang/wordplay/tree/main#future-work) 
 - AWS API Gateway
 - AWS Systems Manager
 - AWS Amplify
