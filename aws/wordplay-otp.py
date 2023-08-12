@@ -1,19 +1,34 @@
 import boto3
 import random
+import logging
 from datetime import datetime, timedelta
 import json
 
-dynamodb = boto3.resource('dynamodb')
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+
 ses = boto3.client('ses')
+dynamodb = boto3.resource('dynamodb')
+
+try:
+    table = dynamodb.Table('wordplayotp')
+except dynamodb.meta.client.exceptions.ResourceNotFoundException:
+    logger.error("Table 'wordplayotp' does not exist")
+    exit(1)
+except dynamodb.meta.client.exceptions.ClientError as e:
+    logger.error(f"Error accessing table 'wordplayotp': {str(e)}")
+    exit(1)
 
 
 def lambda_handler(event=None, context=None):
+    logger.info(f"Received event: {json.dumps(event)}")
+
     to_email = event['queryStringParameters']['email']
     otp = event['queryStringParameters']['otp']
     to_email = 'xiangweiong@gmail.com'
 
-    # For OTP generation
     if otp == 'none':
+        logger.info(f"Generating OTP for email: {to_email}")
         generated_otp = send_otp(to_email)
         add_otp_to_dynamodb(to_email, generated_otp, context)
         return {
@@ -28,8 +43,7 @@ def lambda_handler(event=None, context=None):
 
 
 def verify_otp(to_email, otp):
-    table_name = 'wordplayotp'
-    table = dynamodb.Table(table_name)
+    logger.info(f"Verifying OTP for email: {to_email}")
 
     response = table.scan(
         FilterExpression='email = :emailValue AND otp = :otpValue',
@@ -39,23 +53,24 @@ def verify_otp(to_email, otp):
         }
     )
 
-    # If the response contains items, it means the OTP and email combo exists
     if response['Count'] > 0:
+        logger.info(f"OTP verified for email: {to_email}")
         item = response['Items'][0]
         if 'ttl' in item and item['ttl'] < int(datetime.now().timestamp()):
+            logger.warning("OTP has expired.")
             return {
                 "statusCode": 401,
                 "body": json.dumps({
                     "message": "OTP expired"
                 })
             }
-        # Delete the OTP now that it's verified
+
         table.delete_item(
             Key={
                 'id': item['id']
             }
         )
-
+        logger.info("Item deleted successfully from DynamoDB.")
         return {
             "statusCode": 200,
             "body": json.dumps({
@@ -63,6 +78,7 @@ def verify_otp(to_email, otp):
             })
         }
     else:
+        logger.warning("Invalid OTP or it does not exist for the email.")
         return {
             "statusCode": 401,
             "body": json.dumps({
@@ -72,6 +88,7 @@ def verify_otp(to_email, otp):
 
 
 def send_otp(to_email):
+    logger.info(f"Sending OTP to email: {to_email}")
     otp = f"{random.randint(0, 999999):06}"
     from_email = 'xiangweiong@gmail.com'
     subject = 'Your WordPlay OTP'
@@ -101,13 +118,13 @@ WordPlay Team
 
 
 def add_otp_to_dynamodb(to_email, otp, context):
-
+    logger.info(f"Adding OTP to DynamoDB for email: {to_email}")
     table_name = 'wordplayotp'
     table = dynamodb.Table(table_name)
 
     expiration_time = int((datetime.now() + timedelta(minutes=3)).timestamp())
     item = {
-        'id': context.aws_request_id,  # aws auto generated uuid
+        'id': context.aws_request_id,  # AWS auto-generated UUID
         'email': to_email,
         'otp': otp,
         'ttl': expiration_time
@@ -115,12 +132,13 @@ def add_otp_to_dynamodb(to_email, otp, context):
 
     try:
         table.put_item(Item=item)
+        logger.info("Item added successfully to DynamoDB.")
         return {
             'statusCode': 200,
             'body': json.dumps('Item added successfully')
         }
     except Exception as e:
-        print(str(e))
+        logger.error(f"Error adding item to DynamoDB: {str(e)}")
         return {
             'statusCode': 500,
             'body': json.dumps('Error adding item')

@@ -2,18 +2,24 @@ import boto3
 import json
 import logging
 
-dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('wordplay')
-
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
+
+dynamodb = boto3.resource('dynamodb')
+try:
+    table = dynamodb.Table('wordplay')
+except dynamodb.meta.client.exceptions.ResourceNotFoundException:
+    logger.error("Table 'wordplay' does not exist")
+    exit(1)
+except dynamodb.meta.client.exceptions.ClientError as e:
+    logger.error(f"Error accessing table 'wordplay': {str(e)}")
+    exit(1)
 
 
 def lambda_handler(event, context):
     try:
         logger.info(f"Received event: {json.dumps(event)}")
 
-        # Get the ID of the item to update
         item_id = event['queryStringParameters']['id']
         status = event['queryStringParameters']['status']
 
@@ -24,9 +30,9 @@ def lambda_handler(event, context):
             ExpressionAttributeValues={':pendingdelete': status}
         )
 
-        logger.info(f"Update response: {json.dumps(response)}")
-
         if response['ResponseMetadata']['HTTPStatusCode'] == 200:
+            logger.info(
+                f"Successfully updated item with ID: {item_id} to status: {status}")
             return {
                 'statusCode': 200,
                 'body': json.dumps({

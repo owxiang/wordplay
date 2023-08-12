@@ -65,7 +65,11 @@ npm run dev
   - Contributor leaderboard
   - Notify user on approval status
 - Code
-  - Refactor. Break code into seperate state hooks, effect hooks, event handlers and render logic files.
+  - Refactor
+    - Break code into seperate state hooks, effect hooks, event handlers and render logic files
+  - Use Global Secondary Index
+    - To achieve simple Query operation to retrieve all items with the specific status, which will be much faster and cost-efficient compared to the Scan operation
   - IaC
 - Others
-  - SES Production Access. Currently I'm only able to send and receive OTP using my personal email.
+  - SES Production Access
+    - Currently I'm only able to send and receive OTP using my personal email.
