@@ -132,6 +132,13 @@ export default function Page() {
   };
 
   const handleOtpVerification = async () => {
+    if (!otp || otp.length < 6) {
+      setToast({
+        message: "Please enter a valid OTP.",
+        type: "error",
+      });
+      return;
+    }
     const response = await fetch(
       `${
         process.env.NEXT_PUBLIC_API_URL
@@ -290,6 +297,7 @@ export default function Page() {
             <div className="modal-buttons">
               <button
                 onClick={handleAdminLogin}
+                disabled={!adminPassword.trim()}
                 className="modal-submit-button"
               >
                 Login

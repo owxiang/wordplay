@@ -13,13 +13,18 @@ type AcronymData = {
 };
 
 export default function ManagePage() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filteredItems, setFilteredItems] = useState<AcronymData[]>([]);
   const [items, setItems] = useState<AcronymData[]>([]);
   const [itemsAll, setItemsAll] = useState<AcronymData[]>([]);
-  const [isUpdateModalOpen, setisUpdateModalOpen] = useState(false);
+  const [filteredItems, setFilteredItems] = useState<AcronymData[]>([]);
+
   const [currentItem, setCurrentItem] = useState<AcronymData | null>(null);
   const [originalItem, setOriginalItem] = useState<AcronymData | null>(null);
+
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isUpdateModalOpen, setisUpdateModalOpen] = useState(false);
+
+  const [searchTerm, setSearchTerm] = useState("");
+
   const initialEntries = [
     {
       acronym: "",
@@ -27,14 +32,14 @@ export default function ManagePage() {
     },
   ];
   const [entries, setEntries] = useState(initialEntries);
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const anyFieldEmpty = entries.some(
     (entry) => !entry.acronym || !entry.abbreviation
   );
+
+  const [toast, setToast] = useState({ message: "", type: "" });
+
   const { userEmail } = useEmail();
   const router = useRouter();
-  const [toast, setToast] = useState({ message: "", type: "" });
-  const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
   useEffect(() => {
     if (!userEmail) {
@@ -150,6 +155,24 @@ export default function ManagePage() {
   };
 
   const handleModalUpdate = () => {
+    if (!currentItem?.acronym || !currentItem?.abbreviation) {
+      let message = "";
+
+      if (!currentItem?.acronym && !currentItem?.abbreviation) {
+        message = "Both acronym and abbreviation fields are empty.";
+      } else if (!currentItem?.acronym) {
+        message = "Acronym field is empty.";
+      } else if (!currentItem?.abbreviation) {
+        message = "Abbreviation field is empty.";
+      }
+
+      setToast({
+        message: message,
+        type: "error",
+      });
+      return;
+    }
+
     if (
       originalItem!.acronym !== currentItem?.acronym ||
       originalItem!.abbreviation !== currentItem?.abbreviation
@@ -179,11 +202,6 @@ export default function ManagePage() {
           return;
         }
       }
-      // const status = `pending_update-${originalItem!.acronym}-to-${
-      //   currentItem?.acronym
-      // }-and-${originalItem!.abbreviation}-to-${
-      //   currentItem?.abbreviation
-      // }-by-${userEmail}`;
 
       const status = `pending_update
 CurrentAcronym: ${originalItem?.acronym}
@@ -441,7 +459,6 @@ By: ${userEmail}`;
           onClick={() => {
             setIsAddModalOpen(true);
             setEntries([...initialEntries]);
-            setErrorMessages([]);
           }}
         >
           Add
@@ -475,9 +492,11 @@ By: ${userEmail}`;
                     -
                   </button>
                 )}
-                <button onClick={handleAddField} className="modal-add-button">
-                  +
-                </button>
+                {entries.length < 10 && (
+                  <button onClick={handleAddField} className="modal-add-button">
+                    +
+                  </button>
+                )}
               </div>
             ))}
 
