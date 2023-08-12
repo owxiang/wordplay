@@ -72,4 +72,4 @@ npm run dev
   - IaC
 - Others
   - SES Production Access
-    - Currently I'm only able to send and receive OTP using my personal email.
+    - Currently I'm only able to send and receive OTP using my personal email
