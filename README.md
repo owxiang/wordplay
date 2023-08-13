@@ -59,9 +59,9 @@ npm run dev
 ## Future Work
 
 - Feature
-  - ~~Pending status export~~
-  - ~~Duplicate checker~~
-  - ~~Batch Import~~
+  - :white_check_mark: Pending status export
+  - :white_check_mark: Duplicate checker
+  - :white_check_mark: Batch Import
   - Contributor leaderboard
   - Notify user on approval status
 - Code
