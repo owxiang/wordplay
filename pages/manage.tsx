@@ -281,7 +281,8 @@ By: ${userEmail}`;
 
   const handleSubmit = async () => {
     const BASE_API_ENDPOINT = `${process.env.NEXT_PUBLIC_API_URL}/wordplay-add`;
-    let localErrorMessages = [];
+
+    let localErrorMessages = new Set();
 
     for (let i = 0; i < entries.length; i++) {
       const entry = entries[i];
@@ -294,12 +295,12 @@ By: ${userEmail}`;
 
       if (duplicate) {
         if (duplicate.status === "approved") {
-          localErrorMessages.push(
+          localErrorMessages.add(
             `${entry.acronym} and ${entry.abbreviation} already exists.`
           );
           continue;
         } else if (duplicate.status.includes("pending")) {
-          localErrorMessages.push(
+          localErrorMessages.add(
             `${entry.acronym} and ${entry.abbreviation} already exists as pending.`
           );
           continue;
@@ -314,42 +315,33 @@ By: ${userEmail}`;
       );
 
       if (duplicateInEntries) {
-        const errorMessage = `${entry.acronym} and ${entry.abbreviation} have been entered more than once.`;
-        if (!localErrorMessages.some((msg) => msg === errorMessage)) {
-          localErrorMessages.push(errorMessage);
-        }
+        localErrorMessages.add(
+          `${entry.acronym} and ${entry.abbreviation} have been entered more than once.`
+        );
       }
     }
 
-    if (localErrorMessages.length > 0) {
+    if (localErrorMessages.size > 0) {
       setToast({
-        message: localErrorMessages.join("\n"),
+        message: Array.from(localErrorMessages).join("\n"),
         type: "error",
       });
       return;
     }
 
-    for (let i = 0; i < entries.length; i++) {
-      const entry = entries[i];
-      const endpointWithParams = `${BASE_API_ENDPOINT}?acronym=${entry.acronym}&abbreviation=${entry.abbreviation}&email=${userEmail}`;
+    const endpointWithParams = `${BASE_API_ENDPOINT}?email=${userEmail}`;
 
-      try {
-        const response = await fetch(endpointWithParams, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+    try {
+      console.log(entries);
+      const response = await fetch(endpointWithParams, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(entries),
+      });
 
-        if (response.status !== 200) {
-          setToast({
-            message:
-              "There was an error processing your request. Please try again.",
-            type: "error",
-          });
-          return;
-        }
-      } catch (error) {
+      if (response.status !== 200) {
         setToast({
           message:
             "There was an error processing your request. Please try again.",
@@ -357,7 +349,15 @@ By: ${userEmail}`;
         });
         return;
       }
+    } catch (error) {
+      setToast({
+        message:
+          "There was an error processing your request. Please try again.",
+        type: "error",
+      });
+      return;
     }
+
     setToast({
       message: "All items have been successfully submitted.",
       type: "success",
