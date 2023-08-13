@@ -204,7 +204,7 @@ export default function Page() {
       <input
         type="text"
         className="search-input"
-        placeholder="Search by Acronym or Abbreviation or Email"
+        placeholder="Search Acronym, Abbreviation, Email"
         value={searchTerm}
         onChange={handleInputChange}
       />

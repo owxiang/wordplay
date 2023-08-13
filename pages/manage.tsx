@@ -456,7 +456,7 @@ By: ${userEmail}`;
       <input
         type="text"
         className="search-input"
-        placeholder="Search by Acronym or Abbreviation"
+        placeholder="Search Acronym or Abbreviation"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
@@ -553,7 +553,7 @@ By: ${userEmail}`;
             </div>
 
             {entries.map((entry, index) => (
-              <div className="input-group" key={index}>
+              <div key={index}>
                 <input
                   placeholder="Acronym"
                   value={entry.acronym}
