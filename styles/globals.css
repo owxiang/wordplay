@@ -202,8 +202,20 @@ textarea {
   background-color: rgba(255, 255, 255);
   justify-content: flex-start;
   z-index: 1000;
-  max-height: 80vh; /* The modal will take up to 80% of the viewport height */
-  padding: 1em; /* Add some padding around content */
+  max-height: 80vh;
+  padding: 1em;
+}
+
+/* For the input group */
+input-group {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+}
+
+input-group > * {
+  margin: 0 5px;
 }
 
 /* toast */

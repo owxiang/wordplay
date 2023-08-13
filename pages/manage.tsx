@@ -553,7 +553,7 @@ By: ${userEmail}`;
             </div>
 
             {entries.map((entry, index) => (
-              <div key={index}>
+              <div className="input-group" key={index}>
                 <input
                   placeholder="Acronym"
                   value={entry.acronym}
