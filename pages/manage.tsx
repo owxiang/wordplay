@@ -332,7 +332,6 @@ By: ${userEmail}`;
     const endpointWithParams = `${BASE_API_ENDPOINT}?email=${userEmail}`;
 
     try {
-      console.log(entries);
       const response = await fetch(endpointWithParams, {
         method: "POST",
         headers: {
@@ -363,6 +362,81 @@ By: ${userEmail}`;
       type: "success",
     });
     setIsAddModalOpen(false);
+  };
+
+  const handleCSVUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files![0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async function (evt) {
+      const csvData = evt.target!.result as string;
+      try {
+        const parsedData = parseCSV(csvData);
+        setEntries(parsedData);
+        setIsAddModalOpen(true);
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error ? error.message : "An unknown error occurred.";
+        setToast({
+          message: errorMessage,
+          type: "error",
+        });
+      }
+    };
+    setToast({
+      message: `Imported ${file.name} successfully.`,
+      type: "success",
+    });
+    reader.readAsText(file);
+  };
+
+  const parseCSV = (
+    data: string
+  ): { acronym: string; abbreviation: string }[] => {
+    data = data.trim();
+    const rows = data.split("\n");
+
+    if (rows.length < 2) {
+      throw new Error("CSV is too short.");
+    }
+
+    const parsed = rows
+      .slice(1)
+      .map((row, rowIndex) => {
+        const columns = row.split(",");
+
+        if (columns.length !== 2) {
+          throw new Error(`Expected 2 columns but found ${columns.length}.`);
+        }
+        return {
+          acronym: columns[0].trim(),
+          abbreviation: columns[1].trim(),
+        };
+      })
+      .filter((item) => item !== null) as {
+      acronym: string;
+      abbreviation: string;
+    }[];
+
+    if (parsed.length === 0) {
+      throw new Error("No valid data found in CSV.");
+    }
+
+    return parsed;
+  };
+
+  const downloadCSVTemplate = () => {
+    const template = "acronym,abbreviation\n";
+    const blob = new Blob([template], { type: "text/csv" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "wordplay-template.csv";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
@@ -468,6 +542,16 @@ By: ${userEmail}`;
       <div>
         {isAddModalOpen && (
           <div className="modal-fields-container">
+            <div className="csv-upload">
+              <label className="file-input-container">
+                Import CSV
+                <input type="file" accept=".csv" onChange={handleCSVUpload} />
+              </label>
+              <button className="template-button" onClick={downloadCSVTemplate}>
+                Download CSV Template
+              </button>
+            </div>
+
             {entries.map((entry, index) => (
               <div key={index}>
                 <input
@@ -492,14 +576,11 @@ By: ${userEmail}`;
                     -
                   </button>
                 )}
-                {entries.length < 10 && (
-                  <button onClick={handleAddField} className="modal-add-button">
-                    +
-                  </button>
-                )}
+                <button onClick={handleAddField} className="modal-add-button">
+                  +
+                </button>
               </div>
             ))}
-
             <div className="modal-buttons">
               <button
                 onClick={handleSubmit}

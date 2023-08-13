@@ -61,12 +61,12 @@ npm run dev
 - Feature
   - ~~Pending status export~~
   - ~~Duplicate checker~~
-  - Batch import
+  - ~~Batch Import~~
   - Contributor leaderboard
   - Notify user on approval status
 - Code
   - Refactor
-    - Break code into seperate state hooks, effect hooks, event handlers and render logic files
+    - Unbundle code into seperate state hooks, effect hooks, event handlers and render logic files
   - Use Global Secondary Index
     - To achieve simple Query operation to retrieve all items with the specific status, which will be much faster and cost-efficient compared to the Scan operation
   - IaC
