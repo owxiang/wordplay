@@ -63,7 +63,7 @@ npm run dev
   - :white_check_mark: Duplicate checker
   - :white_check_mark: Batch Import
   - Contributor leaderboard
-  - Notify user on approval status
+  - Able to select reject reason + notify user on approval status
 - Code
   - Refactor
     - Unbundle code into seperate state hooks, effect hooks, event handlers and render logic files
