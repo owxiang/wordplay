@@ -6,6 +6,23 @@
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+## Demo
+
+Main page
+
+https://github.com/owxiang/wordplay/assets/22820037/cb21908d-e922-4394-81bf-7c3f5e3c2a12
+
+
+User Portal
+
+https://github.com/owxiang/wordplay/assets/22820037/5eeea48b-6fd0-4539-aa7f-175b8d34601f
+
+
+Admin Portal
+
+https://github.com/owxiang/wordplay/assets/22820037/00f2c5ef-7866-41c4-a769-61285ae81e63
+
+
 ## Technologies
 
 - AWS Lambda
@@ -28,23 +45,9 @@ There is no local-only setup.
 
 ## Configurations
 
-**Local Environment variables**
-
-Create a `.env.local` file at the root of project.
-
-Add API Gateway Invoke URL to this file:
-
-`NEXT_PUBLIC_API_URL = API-GATEWAY-INVOKE-URL`
-
 **Amplify Environment variables**
 
-Click on "Environment variables" to manage environment variables.
-
-Click on the "Edit" button, and then "Add environment variable". Input the name and value for environment variable for API Gateway Invoke URL:
-
-Name: `NEXT_PUBLIC_API_URL`
-
-Value: `API-GATEWAY-INVOKE-URL`
+`NEXT_PUBLIC_API_URL` = `{API-GATEWAY-INVOKE-URL}`
 
 ## Future Work
 
